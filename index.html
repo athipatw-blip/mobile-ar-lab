@@ -43,12 +43,13 @@
       z-index: 20;
       display: flex;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 10px;
       padding: 0 12px;
     }
 
     button {
-      min-width: 132px;
+      min-width: 110px;
       min-height: 48px;
       border: 0;
       border-radius: 12px;
@@ -60,6 +61,7 @@
     }
 
     #run-button { background: #ffffff; color: #111111; }
+    #speed-button { background: #4fc3f7; color: #111111; }
     #status-button { background: #ffd54f; color: #111111; }
 
     .hint {
@@ -99,10 +101,14 @@
       const arLabel = document.querySelector('#ar-label');
       const topPanel = document.querySelector('#top-panel');
       const runButton = document.querySelector('#run-button');
+      const speedButton = document.querySelector('#speed-button');
       const statusButton = document.querySelector('#status-button');
 
       let running = true;
       let warning = false;
+      let speedIndex = 1;
+      const speeds = [100, 220, 500];
+      const speedLabels = ['ช้า', 'ปกติ', 'เร็ว'];
 
       marker.addEventListener('markerFound', () => {
         topPanel.innerHTML = 'พบ Hiro Marker แล้ว — โมเดลมอเตอร์พร้อมใช้งาน<span class="hint">แตะปุ่มด้านล่างเพื่อทดลองควบคุม</span>';
@@ -116,6 +122,12 @@
         running = !running;
         shaft.setAttribute('spin-control', 'active', running);
         runButton.textContent = running ? 'หยุดมอเตอร์' : 'เริ่มมอเตอร์';
+      });
+
+      speedButton.addEventListener('click', () => {
+        speedIndex = (speedIndex + 1) % speeds.length;
+        shaft.setAttribute('spin-control', 'speed', speeds[speedIndex]);
+        speedButton.textContent = 'ความเร็ว: ' + speedLabels[speedIndex];
       });
 
       statusButton.addEventListener('click', () => {
@@ -147,6 +159,7 @@
 
   <div id="controls">
     <button id="run-button" type="button">หยุดมอเตอร์</button>
+    <button id="speed-button" type="button">ความเร็ว: ปกติ</button>
     <button id="status-button" type="button">จำลองคำเตือน</button>
   </div>
 
